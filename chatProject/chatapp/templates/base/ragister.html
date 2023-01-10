@@ -1,0 +1,84 @@
+{% extends "./header.html" %} 
+{% block title %} Ragister Page {% endblock title %}
+{% block body %}
+<div class="form-body">
+    <div class="row">
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3>Register</h3>
+                    <p>Fill in the data below.</p>
+                    <form class="requires-validation" novalidate action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-12 d-flex justify-content-md-between">
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="text" name="firstname" placeholder="First Name" required />
+                            </div>
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="text" name="lastname" placeholder="Last Name" required />
+                            </div>
+                        </div>
+                        <div class="col-md-12 d-flex justify-content-md-between">
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="text" name="username" placeholder="User Name" required />
+                            </div>
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="email" name="email" placeholder="E-mail Address"
+                                required />
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12 d-flex justify-content-md-between">
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="number" name="phone" placeholder="Phone Number" required />
+                            </div>
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="file" name="profile"
+                                required />
+                            </div>
+                        </div>
+                     
+                        <div class="col-md-12 d-flex justify-content-md-between">
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="password" name="password" placeholder="Password"
+                                required />
+                            </div>
+                            <div class="w_49">
+                                <input class="form-control text-dark fw-bold" type="password" name="repassword" placeholder="Re-Password"
+                                required />
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12 mt-3">
+                            <label class="mb-3 mr-1" for="gender">Gender: </label>
+
+                            <input type="radio" class="btn-check" name="gender" value="Male" id="male" autocomplete="off" required />
+                            <label class="btn btn-sm btn-outline-secondary" for="male">Male</label>
+
+                            <input type="radio" class="btn-check" name="gender" value="FeMale" id="female" autocomplete="off"
+                                required />
+                            <label class="btn btn-sm btn-outline-secondary" for="female">Female</label>
+
+                            <div class="valid-feedback mv-up">You selected a gender!</div>
+                            <div class="invalid-feedback mv-up">Please select a gender!</div>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="conditions" value="True" id="invalidCheck" required />
+                            <label class="form-check-label">I confirm that all data are correct</label>
+                        </div>
+
+                        <div class="form-button mt-3">
+                            <input name="user_ragister" type="submit"  class="btn btn-primary" value="Ragister">
+                        </div>
+                        <div class="form-check my-2 p-0">
+                            <label class="form-check-label">You Have AlReady  Account ! </label>
+                            <a href="/" class="btn btn-primary">Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
