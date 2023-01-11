@@ -8,7 +8,11 @@ import re,os
 @login_required(login_url='/login/')
 def index(request):
     if request.user.is_staff == True:
-        return render(request,"dashboard/index.html")
+        allUserData = User.objects.filter(is_staff=True,is_superuser=False).order_by('id')
+        context={
+            "userData":allUserData
+        }
+        return render(request,"dashboard/index.html",context)
     else:
         messages.error(request,'Not Access!')
         return redirect("logout")

@@ -152,3 +152,66 @@ body {
 .valid-feedback {
   color: #2acc80;
 }
+
+/* #chatarea{
+background-color: white;
+} */
+
+#listuser{
+  height: 100vh!important;
+  overflow-y: scroll;
+}
+
+#icon{
+  font-size: 30px;
+  margin:0 15px;
+}
+.changeingstatus{
+  font-size: 12px;
+  color: white;
+}
+.listforuser{
+  list-style: none;
+  display: flex;
+  align-items: center;
+  padding: 20px 15px 20px 20px;
+  background: #778693;
+  border-bottom: 0.5px solid white;
+}
+#chatareaallmeassage{
+  height: 77vh;
+  background-image: url("/static/images/background.png");
+
+}
+
+.sendmessage{
+  border: 0;
+  flex: 1 1 auto;
+  font-size: 16px;
+  margin: 0;
+  outline: none;
+  min-width: 50px;
+}
+
+.sendbtn{
+  background: #6c757d;
+  border-radius: 50%;
+  color: #fff;
+  border: navajowhite;
+  font-size: 24px;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+}
+#chatarea > div.d-flex.flex-column.text-decoration-none > div:nth-child(2) > form > div{
+  grid-column-gap: 20px;
+}
+
+#messagePopup{
+  position: absolute;
+    left: 25%;
+    top: 0%;
+}
+#messagePopup{
+  list-style: none;
+}

@@ -1,4 +1,66 @@
 {% extends './navbar.html' %}
 {% block title %}Index Page{% endblock title %}
 {% block body %}
+<div class="d-flex ">
+    <div class="w-25 bg-secondary text-decoration-none" id="listuser">
+        <ul class="p-0">
+            {% for data in userData %}
+            <a href="" class="text-decoration-none">
+                <li class="listforuser">
+                    <img src="http://127.0.0.1:8000/media/{{data.profileImages}}" alt="mdo" width="50" height="50"
+                        class="rounded-circle me-3">
+                    <div class="d-flex flex-column">
+                        <p class="m-0 fw-bold text-light ">{{data.username}}</p>
+                        <span class="changeingstatus">Last-Login: <span> {% if data.last_login == None %}Faw Day Befor
+                                {% else %} {{ data.last_login }} {% endif %}</span></span>
+                    </div>
+                </li>
+            </a>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="w-75" id="chatarea">
+        <div class="bg-secondary p-3 ">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img src="http://127.0.0.1:8000/media/{{request.user.profileImages}}" alt="mdo" width="50"
+                        height="50" class="rounded-circle me-3">
+                    <div class="d-flex flex-column">
+                        <p class="m-0 fw-bold text-light">Name</p>
+                        <span class="changeingstatus">Online</span>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <a href="tel:7854785478" class="text-light text-decoration-none">
+                        <i id="icon" class="fa fa-phone" aria-hidden="true"></i>
+                    </a>
+                    <a href="" class="text-light text-decoration-none">
+                        <i id="icon" class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column text-decoration-none">
+            <div id="chatareaallmeassage">
+                chating area
+            </div>
+            <div class="">
+                <form action="">
+                    <div class="d-flex">
+                        <div class="w-100">
+                            <input
+                                class="w-100 sendmessage p-2 bg-light bg-opacity-5 border border-light border-start-0 rounded-end"
+                                type="text">
+                        </div>
+                        <div >
+                            <button type="submit" class="sendbtn">
+                                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock body %}
