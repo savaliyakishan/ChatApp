@@ -20,8 +20,8 @@ def userlogin(request):
                     messages.success(request,"Login SucessFully")
                     return redirect("Dashbord")
             else:
-                messages.error(request,"Login UnSucessFully")
-                return redirect("Home")
+                messages.error(request,"Pelase Ragister First.")
+                return redirect("User-Login")
         except Exception as Ex:
             messages.error(request,f"{Ex}")
     return render(request,'base/login.html')
