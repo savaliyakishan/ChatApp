@@ -11,8 +11,13 @@ def home(request):
             username = request.POST['username']
             password = request.POST['password']
             user=authenticate(username=username,password=password)
-            if user is not None:
-                messages.success(request,"Login SucessFully")
+            if user is not None :
+                login(request, user)
+                if request.user.is_staff == True:
+                    messages.success(request,"Login SucessFully",extra_tags="Login")
+                    return render(request,'dashboard/index.html')
+            else:
+                messages.error(request,"Login UnSucessFully")
                 return redirect("Home")
         except Exception as Ex:
             messages.error(request,f"{Ex}")
@@ -38,6 +43,7 @@ def ragister(request):
             userRagister.email = request.POST['email']
             userRagister.profileImages = request.FILES['profile']
             userRagister.gender = request.POST['gender']
+            userRagister.is_staff=True
             userRagister.set_password(password)
             userRagister.save()
         except Exception as Ex:
