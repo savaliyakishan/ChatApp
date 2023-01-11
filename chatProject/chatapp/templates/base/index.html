@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "poppins";
+
+        }
+
+        html {
+            background-color: rgba(143, 143, 143, 0.24);
+        }
+
+        .container {
+            background-color: #152733;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 20px;
+            height: 35vh;
+        }
+
+        .message {
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px 12px;
+        }
+
+        .main {
+            background-color: white;
+            box-shadow: 1px 0 15px 4px #00000078;
+            padding: 12px 12px;
+            display: flex;
+            width: 70%;
+            justify-content: space-between;
+            border-radius: 6px;
+            margin-left: 20%;
+            margin-top: -4%;
+            margin-right: 20%;
+            flex-direction: column;
+            margin-bottom: 60px;
+        }
+
+        .head {
+            width: 100%;
+            text-align: center;
+            padding-bottom: 6px;
+        }
+
+        ol {
+            padding: 0px 40px;
+            display: block;
+            font-size: larger;
+
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .boxx {
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        h2 {
+            padding: 20px 20px;
+        }
+
+        .img {
+            width: 30px;
+            display: inline;
+        }
+
+        h1 {
+            display: inline;
+            color: white;
+        }
+
+        .help {
+            font-weight: 300;
+            color: rgb(8, 139, 85);
+
+        }
+
+        a {
+            text-decoration: none;
+            padding: 30px 20px;
+        }
+
+        @media screen and (max-width:808px) {
+            .message {
+                display: none;
+            }
+
+            /* .logo {
+                marhttps: //upload.wikimedia.org/wikipedia/commons/thumb/6/6gin: auto;
+                    width: 50%;
+            } */
+        }
+
+        @media screen and (max-width:524px) {
+            .boxx {
+                flex-wrap: wrap;
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="{% static 'images/Logo.png' %}"
+                class="img" alt="">
+            <h1>Chat App</h1>
+        </div>
+        <div class="message">
+            <p> Update Complete scan QR Code to use Whatsapp Web</p>
+        </div>
+    </div>
+    <div class="main">
+        <div class="box">
+            <h2>To Use WhatsApp on your Computer</h2>
+        </div>
+        <div class="boxx">
+            <div class="box1">
+                <ol>
+                    <li>Open Whatsapp on Your Mobile</li>
+                    <li>Tap <b>Menu</b> or <b> Settings</b></li>
+                    <li>Tap on <b>Link A Device</b></li>
+                    <li>Scan QR Code</li>
+                </ol><br>
+                <a href="login/" class="help">Login</a>
+            </div>
+            <div class="box2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/220px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                    alt="">
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</body>
+</body>
+
+</html>

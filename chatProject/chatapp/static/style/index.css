@@ -81,6 +81,7 @@ body {
 .form-content input[type="email"],
 .form-content input[type="number"],
 .form-content input[type="file"],
+.form-content input[type="radio"],
 .form-content select {
   width: 100%;
   padding: 9px 20px;

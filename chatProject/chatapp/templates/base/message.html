@@ -4,6 +4,4 @@
         <li {% if message.tags %} class="rounded bg-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{%endif%} font-weight-bold m-4 p-3 "{% endif %}><b>{{ message }}</b></li>
         {% endfor %}
     </ul>
-{% else %}
-
 {% endif %}
