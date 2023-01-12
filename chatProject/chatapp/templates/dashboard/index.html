@@ -5,7 +5,7 @@
     <div class="w-25 bg-secondary text-decoration-none" id="listuser">
         <ul class="p-0">
             {% for data in userData %}
-            <a href="" class="text-decoration-none">
+            <a href="{{data.id}}" class="text-decoration-none">
                 <li class="listforuser">
                     <img src="http://127.0.0.1:8000/media/{{data.profileImages}}" alt="mdo" width="50" height="50"
                         class="rounded-circle me-3">
@@ -19,48 +19,114 @@
             {% endfor %}
         </ul>
     </div>
+
+
     <div class="w-75" id="chatarea">
+        {% if reciverData is not None %}
         <div class="bg-secondary p-3 ">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <img src="http://127.0.0.1:8000/media/{{request.user.profileImages}}" alt="mdo" width="50"
+                    <img src="http://127.0.0.1:8000/media/{{reciverData.profileImages}}" alt="mdo" width="50"
                         height="50" class="rounded-circle me-3">
                     <div class="d-flex flex-column">
-                        <p class="m-0 fw-bold text-light">Name</p>
+                        <p class="m-0 fw-bold text-light">{{reciverData.username}}</p>
                         <span class="changeingstatus">Online</span>
                     </div>
                 </div>
                 <div class="d-flex">
-                    <a href="tel:7854785478" class="text-light text-decoration-none">
+                    <a href="tel:{{reciverData.phoneNumber}}" class="text-light text-decoration-none">
                         <i id="icon" class="fa fa-phone" aria-hidden="true"></i>
                     </a>
-                    <a href="" class="text-light text-decoration-none">
+                    <a href="" class="text-light d-block text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <i id="icon" class="fa fa-ellipsis-v" aria-hidden="true"></i>
                     </a>
+                    <ul class="dropdown-menu text-small" style="">
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reciverinfo">Profile</a>
+                        </li>
+                        <li><a class="dropdown-item" href="">Block</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
         <div class="d-flex flex-column text-decoration-none">
-            <div id="chatareaallmeassage">
-                chating area
+            <div id="chatareaallmeassage" class="d-flex flex-column justify-content-end">
+                <div class="messagelist">
+                    {% if messagehistory is not None %}
+                        {% for data in messagehistory %}
+                            <div class="message {% if data.senderUserInfo == request.user.id %} sent {% elif data.senderUserInfo == reciverData.id  %} received {% endif %}">
+                                {{data.message}}
+                                <span class="metadata">
+                                    <span class="time">{{data.sendTime}}</span><span class="tick"></span>
+                                </span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
-            <div class="">
-                <form action="">
+            <div class="bg-light">
+                <form action="{{reciverData.id}}/message" method="POST">
+                    {% csrf_token %}
                     <div class="d-flex">
                         <div class="w-100">
-                            <input
-                                class="w-100 sendmessage p-2 bg-light bg-opacity-5 border border-light border-start-0 rounded-end"
-                                type="text">
+                            <input class="w-100 sendmessage p-2 bg-light bg-opacity-5 border border-dark rounded-end"
+                                type="text" name="messagecontain" placeholder="Send Message">
                         </div>
-                        <div >
-                            <button type="submit" class="sendbtn">
-                                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                        <div>
+                            <button type="submit" class="sendbtn" name="sendMessage">
+                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+        <div class="modal fade" id="reciverinfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Profile Informations</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>User Name</td>
+                                <td>{{reciverData.username }}</td>
+                            </tr>
+                            <tr>
+                                <td>First Name</td>
+                                <td>{{reciverData.first_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Last Name</td>
+                                <td>{{reciverData.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{reciverData.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>{{reciverData.phoneNumber}}</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                <td>{{reciverData.gender }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        restore
+        {% endif %}
+
     </div>
+
 </div>
 {% endblock body %}

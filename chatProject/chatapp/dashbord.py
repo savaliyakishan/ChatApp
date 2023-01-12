@@ -1,16 +1,24 @@
 from django.shortcuts import render,redirect,HttpResponse
-from django.contrib.auth import authenticate,logout,login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
+from django.db.models import Q
 import re,os
 
+
 @login_required(login_url='/login/')
-def index(request):
+def index(request,pk=None):
     if request.user.is_staff == True:
-        allUserData = User.objects.filter(is_staff=True,is_superuser=False).order_by('id')
+        reciverUerData=None
+        messageHistory=None
+        if pk is not None :
+            reciverUerData = User.objects.get(id=pk)
+            messageHistory = messageInfo.objects.filter(senderUserInfo__in=[request.user.id,pk],reciveUserInfo__in=[request.user.id,pk])
+        allUserData = User.objects.filter(is_staff=True,is_superuser=False).exclude(id=request.user.id).order_by('id')
         context={
-            "userData":allUserData
+            "userData":allUserData,
+            "reciverData":reciverUerData,
+            "messagehistory":messageHistory
         }
         return render(request,"dashboard/index.html",context)
     else:
@@ -39,3 +47,4 @@ def profile(request):
     else:
         messages.error(request,'Not Access!')
         return redirect("logout")
+

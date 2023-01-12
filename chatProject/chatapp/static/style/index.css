@@ -179,7 +179,7 @@ background-color: white;
   border-bottom: 0.5px solid white;
 }
 #chatareaallmeassage{
-  height: 77vh;
+  height: 76vh;
   background-image: url("/static/images/background.png");
 
 }
@@ -204,7 +204,8 @@ background-color: white;
   height: 50px;
 }
 #chatarea > div.d-flex.flex-column.text-decoration-none > div:nth-child(2) > form > div{
-  grid-column-gap: 20px;
+  /* grid-column-gap: 10px; */
+  align-items: center;
 }
 
 #messagePopup{
@@ -214,4 +215,81 @@ background-color: white;
 }
 #messagePopup{
   list-style: none;
+}
+#chatarea > div.bg-secondary.p-3 > div > div:nth-child(2) > a.text-light.d-block.text-decoration-none.dropdown-toggle::after{
+  display: none;
+}
+
+#chatareaallmeassage > div > ul > li{
+  list-style: none;
+}
+#chatareaallmeassage > div > ul > li > span{
+  width: 25%;
+  background-color: #ebeff8;
+}
+
+
+.message.sent {
+  background: #e1ffc7;
+  border-radius: 5px 0px 5px 5px;
+  float: right;
+}
+.message.received {
+  background:#fff;
+  border-radius: 5px 0px 5px 5px;
+  float: left;
+}
+/* .message:first-child {
+  margin: 16px;
+} */
+.message {
+  color: #000;
+  clear: both;
+  line-height: 18px;
+  font-size: 15px;
+  padding: 8px;
+  position: relative;
+  margin: 8px 16px;
+  max-width: 85%;
+  word-wrap: break-word;
+  z-index: 1;
+}
+.metadata {
+  display: inline-block;
+  /* float: right; */
+  padding: 0 0 0 7px;
+  position: relative;
+  bottom: -4px;
+}
+.metadata .time {
+  color: rgb(0 0 0 / 70%);
+  font-size: 11px;
+  display: inline-block;
+}
+.metadata.tick {
+  display: inline-block;
+  margin-left: 2px;
+  position: relative;
+  top: 4px;
+  height: 16px;
+  width: 16px;
+}
+.message.sent:after {
+  border-width: 0px 0 10px 10px;
+  border-color: transparent transparent transparent #e1ffc7;
+  top: 0;
+  right: -10px;
+}
+.message:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+.message.received:after{
+  border-width: 0px 10px 10px 0;
+  border-color: transparent #fff transparent transparent;
+  top: 0;
+  left: -10px;
 }

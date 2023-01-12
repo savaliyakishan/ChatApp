@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views,dashbord
+from . import views,dashbord,message
 urlpatterns = [
     # base Urls
 
@@ -10,5 +10,9 @@ urlpatterns = [
 
     #deshbord
     path('deshbord/',dashbord.index,name="Dashbord"),
+    path('deshbord/<int:pk>',dashbord.index,name="Chat-with-User"),
     path('deshbord/profile/',dashbord.profile,name="User-Profile"),
+
+    # message
+    path('deshbord/<int:pk>/message',message.messageinfo,name="Chat-with-User-message"),
 ]
