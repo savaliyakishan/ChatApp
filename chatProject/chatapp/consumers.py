@@ -23,6 +23,7 @@ class myAsyncJsonConsumer(AsyncJsonWebsocketConsumer):
         sender = self.scope['url_route']['kwargs']['sender_id']
         reciver = self.scope['url_route']['kwargs']['reciver_id']
         self.groupname = f'user_chatroom_{sender}_{reciver}'
+        
         self.reciver_obj = await DatabaseSyncToAsync(User.objects.get)(id=reciver)
         if self.scope['user'].is_authenticated:
             self.message = await DatabaseSyncToAsync(messageInfo.objects.create)(

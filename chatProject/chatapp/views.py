@@ -32,7 +32,7 @@ def ragister(request):
     if request.method == "POST":
         try:
             password = request.POST['password']
-            # repassword = request.POST['repassword']
+            repassword = request.POST['repassword']
             # if password != repassword:
             #     messages.error(request,'Password Not Match?')
             #     return render(request,'base/ragister.html')
@@ -45,7 +45,10 @@ def ragister(request):
             userRagister.username = request.POST['username']
             userRagister.phoneNumber = request.POST['phone']
             userRagister.email = request.POST['email']
-            userRagister.profileImages = request.FILES['profile']
+            if len(request.FILES) == 0:
+                userRagister.profileImages = 'images/defultprofile.png'
+            else:
+                userRagister.profileImages = request.FILES['profile']
             userRagister.gender = request.POST['gender']
             userRagister.is_staff=True
             userRagister.set_password(password)
@@ -54,7 +57,7 @@ def ragister(request):
             messages.error(request,f"{Ex}")
             return render(request,'base/ragister.html')
         messages.success(request,"Ragister Sucessfully")
-        return render(request,'base/login.html')
+        return redirect('User-Login')
     else:
         return render(request,'base/ragister.html')
 
