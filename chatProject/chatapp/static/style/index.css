@@ -181,7 +181,24 @@ background-color: white;
 #chatareaallmeassage{
   height: 76vh;
   background-image: url("/static/images/background.png");
+  }
 
+
+#style-8::-webkit-scrollbar-track
+{
+	border: 1px solid black;
+	background-color: #F5F5F5;
+}
+
+#style-8::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+#style-8::-webkit-scrollbar-thumb
+{
+	background-color: #000000;	
 }
 
 .sendmessage{
@@ -292,4 +309,9 @@ background-color: white;
   border-color: transparent #fff transparent transparent;
   top: 0;
   left: -10px;
+}
+
+#messagelist{
+  height: auto;
+  overflow-y: scroll;
 }
