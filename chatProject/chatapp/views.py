@@ -17,6 +17,9 @@ def userlogin(request):
             if user is not None :
                 login(request, user)
                 if request.user.is_staff == True:
+                    user_obj = User.objects.get(email=request.user.email)
+                    user_obj.active_user = True
+                    user_obj.save()
                     messages.success(request,"Login SucessFully")
                     return redirect("Dashbord")
             else:
@@ -33,13 +36,13 @@ def ragister(request):
         try:
             password = request.POST['password']
             repassword = request.POST['repassword']
-            # if password != repassword:
-            #     messages.error(request,'Password Not Match?')
-            #     return render(request,'base/ragister.html')
-            # conform_password = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$", password)
-            # if conform_password is None:
-            #     messages.error(request,'Password Not Valid?')
-            #     return render(request,'base/ragister.html')
+            if password != repassword:
+                messages.error(request,'Password Not Match?')
+                return render(request,'base/ragister.html')
+            conform_password = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,}$", password)
+            if conform_password is None:
+                messages.error(request,'Password Not Valid follow Formate(Capital,small,numeric,special characters)')
+                return render(request,'base/ragister.html')
             userRagister.first_name = request.POST['firstname']
             userRagister.last_name = request.POST['lastname']
             userRagister.username = request.POST['username']
@@ -62,6 +65,12 @@ def ragister(request):
         return render(request,'base/ragister.html')
 
 def userLogout(request):
-    logout(request)
+    try:
+        user_obj = User.objects.get(email=request.user.email)
+        user_obj.active_user = False
+        user_obj.save()
+        logout(request)
+    except Exception:
+        pass
     messages.success(request,"Logout Sucessfully!")
     return redirect('/login/')
