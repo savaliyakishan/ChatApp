@@ -8,9 +8,14 @@
         <ul class="p-0">
             {% for data in userData %}
             <a href="{{data.id}}" class="text-decoration-none">
-                <li class="listforuser">
+                <li class="listforuser" style=" position: relative; ">
                     <img src="/media/{{data.profileImages}}" alt="mdo" width="50" height="50"
                         class="rounded-circle me-3">
+                        {% if data.active_user == True %}
+                        <img src="{% static 'images/online.png' %}" alt="Logo" width="60" height="60" style=" width: 5%; position: absolute; height: 20%; left: 54px; top: 52px; ">
+                        {% else %}
+                        <img src="{% static 'images/offline.png' %}" alt="Logo" width="60" height="60" style=" width: 5%; position: absolute; height: 20%; left: 54px; top: 52px; ">
+                        {% endif %}
                     <div class="d-flex flex-column">
                         <p class="m-0 fw-bold text-light ">{{data.username}}</p>
                         <span class="changeingstatus">Last-Login: <span> {% if data.last_login == None %}Faw Day Befor
@@ -32,7 +37,12 @@
                         height="50" class="rounded-circle me-3">
                     <div class="d-flex flex-column">
                         <p class="m-0 fw-bold text-light">{{reciverData.username}}</p>
-                        <span class="changeingstatus">Online</span>
+                        <span class="changeingstatus">
+                                {% if reciverData.active_user == True %}
+                                online
+                                {% else %}
+                                offline
+                                {% endif %}</span>
                     </div>
                 </div>
                 <div class="d-flex">
