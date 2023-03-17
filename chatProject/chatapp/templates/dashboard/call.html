@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call</title>
+</head>
+
+<body>
+    <div id="userInfo" style="display: block;">
+        <div style=" display: flex; flex-direction: column; align-items: center; width: 300px; ">
+            <h1>Hello, <span id="nameHere"></span></h1>
+        </div>
+    </div>
+    <div id="answer" style=" display: none; ">
+        <div class="incomingWrapper">
+            <div class="itemWrapper">
+                <h2>Incomming Call</h2>
+            </div>
+            <div class="itemWrapper">
+                <h2 style="line-height: 0px"><span id="callerName"></span></h2>
+            </div>
+            <div class="itemWrapper" style="display: flex; flex-direction: row; margin-bottom: 20px">
+                <button class="actionButton" onclick="answer()">Answer</button>
+            </div>
+        </div>
+    </div>
+    <div id="calling" style="display: block;">
+        <div class="incomingWrapper">
+            <div class="itemWrapper">
+                <h2>Calling</h2>
+            </div>
+            <div class="itemWrapper">
+                <h3 style="line-height: 0px">
+                    <span id="otherUserNameCA"></span>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div id="videos">
+        <div style=" position: absolute; top: 0; right: 0; padding-right: 20px; padding-top: 20px; ">
+            <video width="100px" id="localVideo" autoplay muted playsinline></video>
+        </div>
+        <div id="remoteVideoDiv">
+            <video style="width: 500px" id="remoteVideo" autoplay playsinline></video>
+        </div>
+    </div>
+</body>
+<script>
+
+    let otherUser;
+    let remoteRTCMessage;
+
+    let iceCandidatesFromCaller = [];
+    let peerConnection;
+    let remoteStream;
+    let localStream;
+
+    let callInProgress = false;
+    let pcConfig = { iceServers: [{ url: "stun:stun.jap.bloggernepal.com:5349" }, { url: "turn:turn.jap.bloggernepal.com:5349", username: "guest", credential: "somepassword" }, { url: "stun:stun.l.google.com:19302" }] }
+
+    let sdpConstraints = {
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: true,
+    };
+
+    const url = window.location.pathname.split('/')
+    const s_id = url[2];
+    const r_id = url[4];
+    callSocket = new WebSocket(`ws://` + window.location.host + `/ws/call/`);
+    callSocket.onopen = function (e) {
+        callSocket.send(JSON.stringify({ type: "login", data: { sender_id: s_id } }));
+        console.log("[open]");
+    }
+
+    document.getElementById("nameHere").innerHTML = s_id;
+    document.getElementById("otherUserNameCA").innerHTML = r_id;
+
+    callSocket.onmessage = function (event) {
+        let response = JSON.parse(event.data);
+
+        let type = response.type;
+
+        if (type == "connection") {
+            console.log("=============================connection=========================")
+            console.log(response.data.message);
+            userToCall = r_id
+
+            beReady().then((bool) => { processCall(userToCall); });
+
+        }
+
+        if (type == "call_received") {
+            console.log("=============================call_received=========================")
+
+            onNewCall(response.data);
+        }
+
+        if (type == "call_answered") {
+            console.log("=============================call_answered=========================")
+
+            onCallAnswered(response.data);
+        }
+
+        if (type == "ICEcandidate") {
+            console.log("=============================ICEcandidate=========================")
+
+            onICECandidate(response.data);
+        }
+    }
+
+    const onNewCall = (data) => {
+          //when other called you
+          //show answer button
+
+          otherUser = data.caller;
+          remoteRTCMessage = data.rtcMessage;
+
+          // document.getElementById("profileImageA").src = baseURL + callerProfile.image;
+          document.getElementById("callerName").innerHTML = otherUser;
+        //   document.getElementById("call").style.display = "none";
+          document.getElementById("answer").style.display = "block";
+        }
+
+        const onCallAnswered = (data) => {
+          //when other accept our call
+          remoteRTCMessage = data.rtcMessage;
+          peerConnection.setRemoteDescription(
+            new RTCSessionDescription(remoteRTCMessage)
+          );
+
+          document.getElementById("calling").style.display = "none";
+
+          console.log("Call Started. They Answered");
+          // console.log(pc);
+
+          callProgress();
+        };
+
+        const onICECandidate = (data) => {
+          // console.log(data);
+          console.log("GOT ICE candidate");
+
+          let message = data.rtcMessage;
+
+          let candidate = new RTCIceCandidate({
+            sdpMLineIndex: message.label,
+            candidate: message.candidate,
+          });
+
+          if (peerConnection) {
+            console.log("ICE candidate Added");
+            peerConnection.addIceCandidate(candidate);
+          } else {
+            console.log("ICE candidate Pushed");
+            iceCandidatesFromCaller.push(candidate);
+          }
+        };
+      
+
+
+
+
+
+
+    function sendCall(data) {
+
+        // console.log("Send Call");
+        console.log(data);
+        callSocket.send(
+            JSON.stringify({
+                type: "call",
+                data,
+            })
+        );
+        console.log("call Thay che");
+    }
+
+
+    function sendICEcandidate(data) {
+        //send only if we have caller, else no need to
+        console.log("Send ICE candidate");
+        // socket.emit("ICEcandidate", data)
+        callSocket.send(
+            JSON.stringify({
+                type: "ICEcandidate",
+                data,
+            })
+        );
+    };
+
+    function beReady() {
+        return navigator.mediaDevices
+            .getUserMedia({
+                audio: true,
+            })
+            .then((stream) => {
+                localStream = stream;
+                localVideo.srcObject = stream;
+
+                return createConnectionAndAddStream();
+            })
+            .catch(function (e) {
+                alert("getUserMedia() error: " + e.name);
+            });
+    }
+
+    function createConnectionAndAddStream() {
+        createPeerConnection();
+        peerConnection.addStream(localStream);
+        return true;
+    }
+
+    function processCall(userName) {
+        console.log(userName);
+        peerConnection.createOffer(
+            (sessionDescription) => {
+                peerConnection.setLocalDescription(sessionDescription);
+                sendCall({
+                    name: userName,
+                    rtcMessage: sessionDescription,
+                });
+            },
+            (error) => {
+                console.log("Error");
+            }
+        );
+    }
+
+    function processAccept() {
+        peerConnection.setRemoteDescription(
+            new RTCSessionDescription(remoteRTCMessage)
+        );
+        peerConnection.createAnswer(
+            (sessionDescription) => {
+                peerConnection.setLocalDescription(sessionDescription);
+
+                if (iceCandidatesFromCaller.length > 0) {
+                    //I am having issues with call not being processed in real world (internet, not local)
+                    //so I will push iceCandidates I received after the call arrived, push it and, once we accept
+                    //add it as ice candidate
+                    //if the offer rtc message contains all thes ICE candidates we can ingore this.
+                    for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
+                        //
+                        let candidate = iceCandidatesFromCaller[i];
+                        console.log("ICE candidate Added From queue");
+                        try {
+                            peerConnection
+                                .addIceCandidate(candidate)
+                                .then((done) => {
+                                    console.log(done);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                    iceCandidatesFromCaller = [];
+                    console.log("ICE candidate queue cleared");
+                } else {
+                    console.log("NO Ice candidate in queue");
+                }
+
+                answerCall({
+                    caller: otherUser,
+                    rtcMessage: sessionDescription,
+                });
+            },
+            (error) => {
+                console.log("Error");
+            }
+        );
+    }
+
+    /////////////////////////////////////////////////////////
+
+    function createPeerConnection() {
+        try {
+            peerConnection = new RTCPeerConnection(pcConfig);
+            // peerConnection = new RTCPeerConnection();
+            peerConnection.onicecandidate = handleIceCandidate;
+            peerConnection.onaddstream = handleRemoteStreamAdded;
+            peerConnection.onremovestream = handleRemoteStreamRemoved;
+            console.log("Created RTCPeerConnnection");
+            return;
+        } catch (e) {
+            console.log(
+                "Failed to create PeerConnection, exception: " + e.message
+            );
+            alert("Cannot create RTCPeerConnection object.");
+            return;
+        }
+    }
+
+    function handleIceCandidate(event) {
+        // console.log('icecandidate event: ', event);
+        if (event.candidate) {
+            console.log("Local ICE candidate");
+            // console.log(event.candidate.candidate);
+
+            sendICEcandidate({
+                user: r_id,
+                rtcMessage: {
+                    label: event.candidate.sdpMLineIndex,
+                    id: event.candidate.sdpMid,
+                    candidate: event.candidate.candidate,
+                },
+            });
+        } else {
+            console.log("End of candidates.");
+        }
+    }
+
+    function handleRemoteStreamAdded(event) {
+        console.log("Remote stream added.");
+        remoteStream = event.stream;
+        remoteVideo.srcObject = remoteStream;
+    }
+
+    function handleRemoteStreamRemoved(event) {
+        console.log("Remote stream removed. Event: ", event);
+        remoteVideo.srcObject = null;
+        localVideo.srcObject = null;
+    }
+
+</script>
+
+</html>

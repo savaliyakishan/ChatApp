@@ -15,4 +15,8 @@ urlpatterns = [
 
     # message
     path('deshbord/<int:pk>/message',message.messageinfo,name="Chat-with-User-message"),
+
+    # Call
+
+    # path('deshbord/<int:sender>/Call/<int:reciver>',message.callinfo,name="Chat-with-User-message"),
 ]

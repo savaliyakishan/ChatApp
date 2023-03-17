@@ -12,3 +12,8 @@ def messageinfo(request,pk=None):
     else:
         messages.error(request,'Not Access!')
         return redirect("logout")
+    
+# @login_required(login_url='/login/')
+# def callinfo(request,sender=None,reciver=None):
+#     if request.user.is_staff == True:
+#         return render(request,'dashboard/call.html')

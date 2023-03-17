@@ -46,19 +46,19 @@
                     </div>
                 </div>
                 <div class="d-flex">
-                    <a href="tel:{{reciverData.phoneNumber}}" class="text-light text-decoration-none">
+                    <a class="text-light text-decoration-none" style=" cursor: pointer; " data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <i id="icon" class="fa fa-phone" aria-hidden="true"></i>
                     </a>
                     <a href="" class="text-light d-block text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i id="icon" class="fa fa-ellipsis-v" aria-hidden="true"></i>
                     </a>
-                    <ul class="dropdown-menu text-small" style="">
+                    <ul class="dropdown-menu text-small" >
                         <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reciverinfo">Profile</a>
                         </li>
                         <li><a class="dropdown-item" href="">Block</a></li>
                     </ul>
-                </div>
+                </div>              
             </div>
         </div>
         <div class="d-flex flex-column text-decoration-none">
@@ -83,14 +83,10 @@
                             <input class="w-100 sendmessage p-2 bg-light bg-opacity-5 border border-dark rounded-end"
                                 type="text" name="messagecontain" id="message_send_input" placeholder="Send Message">
                         </div>
-                        <div>
-                            <button onclick="sendfunction()" class="sendbtn" name="sendMessage">
-                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                            </button>
-                        </div>
                     </div>
             </div>
         </div>
+        <!-- Profile Information -->
         <div class="modal fade" id="reciverinfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -132,13 +128,87 @@
                 </div>
             </div>
         </div>
+        <!-- Call Information -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style=" max-width: 80%; height: auto; ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Call,<span id="otherUserNameC"></span></h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-outline-primary">Voice Call</button>
+                    <button type="button" onclick="call()"  class="btn btn-outline-success">Video Call</button>
+                    <div id="answer">
+                        <div class="incomingWrapper">
+                            <div class="itemWrapper">
+                                <h2>Incomming Call</h2>
+                            </div>
+                            <div class="itemWrapper">
+                                <h2 style="line-height: 0px;"><span id="callerName"></span></h2>
+                            </div>
+                            <div class="itemWrapper" style="display: flex; flex-direction: row; margin-bottom: 20px;">
+                                <button class="actionButton" onclick="answer()">Answer</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="videos">
+                        <div style="position:absolute; top:0; right:0; padding-right: 20px; padding-top: 20px">
+                            <video width="100px" id="localVideo" autoplay muted playsinline></video>
+                        </div>
+                        <div id="remoteVideoDiv">
+                            <video style="width: 500px;" id="remoteVideo" autoplay playsinline></video>
+                        </div>
+                        <button id="btn_toggle_audio">Audio Mute</button>
+                        <button  id="btn_toggle_video" >Video off</button>
+                    <button class="actionButton" onclick="stop()">End Call</button>
+    
+                    </div>
+                    <div id="inCall">
+                        <div class="incomingWrapper">
+                            <div class="itemWrapper">
+                                <h3>On Call With</h3>
+                                <h2 style="line-height: 0px;"><span id="otherUserNameC"></span></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="calling">
+                        <div class="incomingWrapper">
+                            <div class="itemWrapper">
+                                <h2>Calling</h2>
+                            </div>
+                            <div class="itemWrapper">
+                                <h3 style="line-height: 0px;"><span id="otherUserNameCA"></span></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         {{ reciverData.id|json_script:"reciver_id" }}
         {{ request.user.id|json_script:"sender_id" }}
+        {{ reciverData.username|json_script:"reciver_username" }}
+        {{ request.user.username|json_script:"sender_username" }}
         
         <script src="{% static 'script/message.js' %}"></script>
+        <script src="{% static 'script/call.js' %}"></script> 
+
         <script>
             $(document).ready(function () {
                 $('#messagelist').scrollTop($('#messagelist')[0].scrollHeight);
+            });
+            var input = document.getElementById("message_send_input");
+            input.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendfunction()
+            }
             });
         </script>
         {% else %}

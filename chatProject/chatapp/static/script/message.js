@@ -1,14 +1,14 @@
 const sender_id = JSON.parse(document.getElementById('sender_id').textContent);
 const reciver_id = JSON.parse(document.getElementById('reciver_id').textContent);
-const socket = new WebSocket(`ws://` + window.location.host + `/ws/jac/${sender_id}/${reciver_id}` + `/`);
-socket.onopen = function (e) {
-    console.log("[open]");
+const chatsocket = new WebSocket(`ws://` + window.location.host + `/ws/jac/${sender_id}/${reciver_id}` + `/`);
+chatsocket.onopen = function (e) {
+    console.log("[open]=====chat");
 };
 
 
 function sendfunction(){
     const messageValue = document.getElementById('message_send_input').value;
-    socket.send(JSON.stringify({ 
+    chatsocket.send(JSON.stringify({ 
         'message': messageValue,
         "sender_user_id": sender_id,
         "reciver_user_id":reciver_id}));
@@ -16,7 +16,7 @@ function sendfunction(){
     }
 
 
-socket.onmessage = function (event) {
+    chatsocket.onmessage = function (event) {
     data = JSON.parse(event.data)
     let message = data['message']['message']
     let reciver_group_name = data['message']['reciver_group_name']
@@ -61,4 +61,8 @@ function newMessage(message, reciver_group_name, sender_group_name) {
     document.getElementById('messagelist').innerHTML += message_element;
     $('#messagelist').scrollTop($('#messagelist')[0].scrollHeight);
 }
+
+
+
+
 
