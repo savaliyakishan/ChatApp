@@ -21,6 +21,7 @@ class myAsyncJsonConsumer(AsyncJsonWebsocketConsumer):
             self.close()
 
     async def receive_json(self, content, **kwargs):
+        type = content['type']
         sender = self.scope['url_route']['kwargs']['sender_id']
         reciver = self.scope['url_route']['kwargs']['reciver_id']
         self.groupname = f'user_chatroom_{sender}_{reciver}'

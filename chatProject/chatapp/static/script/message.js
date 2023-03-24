@@ -1,14 +1,53 @@
 const sender_id = JSON.parse(document.getElementById('sender_id').textContent);
 const reciver_id = JSON.parse(document.getElementById('reciver_id').textContent);
 const chatsocket = new WebSocket(`ws://` + window.location.host + `/ws/jac/${sender_id}/${reciver_id}` + `/`);
+
+
+
 chatsocket.onopen = function (e) {
     console.log("[open]=====chat");
 };
 
+let type;
+const toggleSwitch = document.getElementById('Penicmode');
+toggleSwitch.addEventListener('change', switchTheme, false);
 
+const currentMode = localStorage.getItem('mode');
+type = currentMode
+if (currentMode) {
+    document.documentElement.setAttribute('data-theme', currentMode);
+    
+    if (currentMode === 'penic') {
+        toggleSwitch.checked = true;
+        
+    }
+}
+
+function switchTheme(e) {
+    if (e.target.checked) {
+        localStorage.setItem('mode', 'penic');
+        type = 'penic'
+        document.getElementById('normalmodediv').style.display="none";
+        document.getElementById('penicmodediv').style.display='block';
+        
+        
+    }
+    else {        
+        localStorage.setItem('mode', 'normal');
+        type = 'normal'
+        document.getElementById('penicmodediv').style.display="none";
+        document.getElementById('normalmodediv').style.display='block';
+    }    
+}
+
+
+
+console.log(type);
 function sendfunction(){
     const messageValue = document.getElementById('message_send_input').value;
-    chatsocket.send(JSON.stringify({ 
+    console.log(type);
+    chatsocket.send(JSON.stringify({
+        'type':type,
         'message': messageValue,
         "sender_user_id": sender_id,
         "reciver_user_id":reciver_id}));

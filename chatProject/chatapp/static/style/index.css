@@ -315,3 +315,13 @@ background-color: white;
   height: auto;
   overflow-y: scroll;
 }
+
+@media only screen and (max-width: 768px) {
+  body > div.w-100 > header{
+    justify-content: space-between!important;
+  }
+  
+  #listuser,#chatarea{
+    width: 50%!important;
+  }
+}
