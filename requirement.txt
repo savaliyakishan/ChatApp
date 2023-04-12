@@ -110,4 +110,6 @@ websockets==10.4
 wsproto==1.2.0
 yahoo-fin==0.8.9.1
 zipp==3.11.0
+zipp==3.11.0
+
 zope.interface==5.5.2
